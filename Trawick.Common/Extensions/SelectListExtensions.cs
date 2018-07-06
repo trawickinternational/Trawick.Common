@@ -28,6 +28,7 @@ namespace Trawick.Common.Extensions
 				try
 				{
 					newValue = item.Text.Split('$').Last().Split(' ').First().Replace(",", "");
+					// this should try to return ONLY digits grouped together
 				}
 				catch
 				{

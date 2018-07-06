@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Hosting;
-
+using Trawick.Common.Extensions;
 
 namespace Trawick.Common.Helpers
 {
@@ -142,6 +142,79 @@ namespace Trawick.Common.Helpers
 		//// use example:
 		//// var files = SearchAccesibleFiles(@"c:\", "bugs");
 		//// will return every file on the c drive, in an accessible directory, with a name that contains 'bugs'
+
+
+
+		
+
+		public static Dictionary<string, string> BuildMapFrom<T>(T model)
+		{
+			//var map = new Dictionary<string, string>();
+			//foreach (var prop in model.GetType().GetProperties())
+			//{
+			//	try
+			//	{
+			//		map.Add(prop.Name, prop.GetValue(model).ToString());
+			//	}
+			//	catch
+			//	{
+
+			//	}
+			//}
+			//return map;
+
+			return model.GetPropertyMap();
+		}
+
+
+
+
+
+
+		public static void WriteBytesToStream(Stream stream, byte[] bytes)
+		{
+			using (var writer = new BinaryWriter(stream))
+			{
+				writer.Write(bytes);
+			}
+		}
+
+
+
+
+		/// <summary>
+		/// Converts a string to byte array
+		/// </summary>
+		/// <param name="input">The string</param>
+		/// <returns>The byte array</returns>
+		public static byte[] ConvertToByteArray(string input)
+		{
+			return input.Select(Convert.ToByte).ToArray();
+		}
+
+		/// <summary>
+		/// Converts a byte array to a string
+		/// </summary>
+		/// <param name="bytes">The byte array</param>
+		/// <returns>The string</returns>
+		public static string ConvertToString(byte[] bytes)
+		{
+			return new string(bytes.Select(Convert.ToChar).ToArray());
+		}
+
+		/// <summary>
+		/// Converts a byte array to a Base64 string
+		/// </summary>
+		/// <param name="bytes">The byte array</param>
+		/// <returns>The Base64 string</returns>
+		public static string ConvertToBase64String(byte[] bytes)
+		{
+			return Convert.ToBase64String(bytes);
+		}
+
+
+
+
 
 	}
 }

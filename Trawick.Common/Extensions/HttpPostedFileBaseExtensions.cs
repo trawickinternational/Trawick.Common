@@ -11,14 +11,10 @@ namespace Trawick.Common.Extensions
 
 		public static byte[] ToByteArray(this HttpPostedFileBase file)
 		{
-			//Stream stream = file.InputStream;
-			//stream.Position = 0;
-			//using (BinaryReader b = new BinaryReader(stream))
-			//{
-			//	return b.ReadBytes(file.ContentLength);
-			//}
-			BinaryReader reader = new BinaryReader(file.InputStream);
-			return reader.ReadBytes(file.ContentLength);
+			using (var br = new BinaryReader(file.InputStream))
+			{
+				return br.ReadBytes(file.ContentLength);
+			}
 		}
 
 		public static string ToDataURL(this HttpPostedFileBase file)

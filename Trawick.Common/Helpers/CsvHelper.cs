@@ -6,44 +6,84 @@ using System.Web;
 
 namespace Trawick.Common.Helpers
 {
-	public class CsvHelper
+	public static class CsvHelper
 	{
 
+		public static List<Dictionary<string, string>> GetAsDictionary(string filePath)
+		{
+			return GetAsDictionary(FileToByteArray(filePath));
+		}
 
-		public List<Dictionary<string, string>> LoadCsvAsDictionary(string path)
+
+		public static List<Dictionary<string, string>> GetAsDictionary(byte[] bytes)
 		{
 			var result = new List<Dictionary<string, string>>();
 
-			var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-			System.IO.StreamReader file = new System.IO.StreamReader(fs);
-
-			string line;
-
-			int n = 0;
-			List<string> columns = null;
-			while ((line = file.ReadLine()) != null)
+			using (var fs = new MemoryStream(bytes))
 			{
-				var values = SplitCsv(line);
-				if (n == 0)
+				using (var file = new StreamReader(fs))
 				{
-					columns = values;
+					string line;
+					int n = 0;
+					List<string> columns = null;
+					while ((line = file.ReadLine()) != null)
+					{
+						var values = SplitCsv(line);
+						if (n == 0)
+						{
+							columns = values;
+						}
+						else
+						{
+							var dict = new Dictionary<string, string>();
+							for (int i = 0; i < columns.Count; i++)
+								if (i < values.Count)
+									dict.Add(columns[i], values[i]);
+							result.Add(dict);
+						}
+						n++;
+					}
 				}
-				else
-				{
-					var dict = new Dictionary<string, string>();
-					for (int i = 0; i < columns.Count; i++)
-						if (i < values.Count)
-							dict.Add(columns[i], values[i]);
-					result.Add(dict);
-				}
-				n++;
 			}
-
-			file.Close();
 			return result;
 		}
 
-		private List<string> SplitCsv(string csv)
+
+		//public List<Dictionary<string, string>> LoadCsvAsDictionary(string filePath)
+		//{
+		//	var result = new List<Dictionary<string, string>>();
+
+		//	using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+		//	{
+		//		using (var file = new StreamReader(fs))
+		//		{
+		//			string line;
+		//			int n = 0;
+		//			List<string> columns = null;
+		//			while ((line = file.ReadLine()) != null)
+		//			{
+		//				var values = SplitCsv(line);
+		//				if (n == 0)
+		//				{
+		//					columns = values;
+		//				}
+		//				else
+		//				{
+		//					var dict = new Dictionary<string, string>();
+		//					for (int i = 0; i < columns.Count; i++)
+		//						if (i < values.Count)
+		//							dict.Add(columns[i], values[i]);
+		//					result.Add(dict);
+		//				}
+		//				n++;
+		//			}
+		//		}
+		//	}
+		//	return result;
+		//}
+
+
+		private static List<string> SplitCsv(string csv)
 		{
 			var values = new List<string>();
 
@@ -73,6 +113,16 @@ namespace Trawick.Common.Helpers
 				values.Add(csv.Substring(last + 1).Trim());
 
 			return values;
+		}
+
+
+		private static byte[] FileToByteArray(string filePath)
+		{
+			if (File.Exists(filePath))
+			{
+				return File.ReadAllBytes(filePath);
+			}
+			return null;
 		}
 
 

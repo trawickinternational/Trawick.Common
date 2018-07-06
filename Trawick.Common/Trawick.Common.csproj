@@ -89,16 +89,17 @@
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Extensions\HttpPostedFileBaseExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
+    <Compile Include="Extensions\ModelExtensions.cs" />
     <Compile Include="Extensions\SectionExtensions.cs" />
     <Compile Include="Extensions\SelectListExtensions.cs" />
     <Compile Include="Helpers\Common.cs" />
     <Compile Include="Helpers\Copy.cs" />
     <Compile Include="Helpers\CsvHelper.cs" />
+    <Compile Include="Helpers\Format.cs" />
     <Compile Include="Helpers\Imager.cs" />
     <Compile Include="Helpers\MailHelper.cs" />
     <Compile Include="Helpers\SqlHelper.cs" />
     <Compile Include="Helpers\StoredProcs.cs" />
-    <Compile Include="Helpers\SubdomainRoute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
