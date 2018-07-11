@@ -9,8 +9,8 @@ namespace Trawick.Common.Extensions
 {
 	public static class HtmlHelperExtensions
 	{
-
-		public static MvcHtmlString BsActionLink(this HtmlHelper html, string text, string action, string controller, object routeValues = null, object css = null)
+		// ActionLink for Bootstrap. Adds "active" class if current page and converts all text to HtmlString, so it can include markup.
+		public static MvcHtmlString BsActionLink(this HtmlHelper html, string text, string action, string controller, object routeValues = null, object htmlAttr = null)
 		{
 			var context = html.ViewContext;
 			if (context.Controller.ControllerContext.IsChildAction)
@@ -24,7 +24,7 @@ namespace Trawick.Common.Extensions
 				(new UrlHelper(html.ViewContext.RequestContext)).Action(action, controller) :
 				(new UrlHelper(html.ViewContext.RequestContext)).Action(action, controller, routeValues);
 
-			var htmlAttributes = HtmlHelper.AnonymousObjectToHtmlAttributes(css);
+			var htmlAttributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttr);
 			TagBuilder aTag = new TagBuilder("a");
 
 			if (currentAction.Equals(action.ToLower(), StringComparison.InvariantCulture) &&
@@ -41,18 +41,19 @@ namespace Trawick.Common.Extensions
 		}
 
 
-		public static IDictionary<string, object> MergeHtmlAttributes(this HtmlHelper helper, object htmlAttributesObject, object defaultHtmlAttributesObject)
+		// Good for use inside EditorTemplates.
+		public static IDictionary<string, object> MergeHtmlAttributes(this HtmlHelper helper, object htmlAttr, object defaultHtmlAttr)
 		{
 			var concatKeys = new string[] { "class" };
-			var htmlAttributesDict = htmlAttributesObject as IDictionary<string, object>;
-			var defaultHtmlAttributesDict = defaultHtmlAttributesObject as IDictionary<string, object>;
+			var htmlAttributesDict = htmlAttr as IDictionary<string, object>;
+			var defaultHtmlAttributesDict = defaultHtmlAttr as IDictionary<string, object>;
 
 			RouteValueDictionary htmlAttributes = (htmlAttributesDict != null)
 					? new RouteValueDictionary(htmlAttributesDict)
-					: HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributesObject);
+					: HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttr);
 			RouteValueDictionary defaultHtmlAttributes = (defaultHtmlAttributesDict != null)
 					? new RouteValueDictionary(defaultHtmlAttributesDict)
-					: HtmlHelper.AnonymousObjectToHtmlAttributes(defaultHtmlAttributesObject);
+					: HtmlHelper.AnonymousObjectToHtmlAttributes(defaultHtmlAttr);
 
 			foreach (var item in htmlAttributes)
 			{
