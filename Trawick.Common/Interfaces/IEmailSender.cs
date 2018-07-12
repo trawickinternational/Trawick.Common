@@ -32,6 +32,8 @@ namespace Trawick.Common.Email
         public int MasterEnrollmentId { get; set; }
 
         public int MemberId { get; set; }
+
+        public bool IsTest { get; set; }
     }
 
     public class EmailResponse
