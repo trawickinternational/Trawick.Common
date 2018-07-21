@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 
 namespace Trawick.Common.Extensions
@@ -38,6 +39,16 @@ namespace Trawick.Common.Extensions
 			float nG = c.G / 255.0f;
 			float nB = c.B / 255.0f;
 			return 0.2126 * nR + 0.7152 * nG + 0.0722 * nB;
+		}
+
+
+		public static String GetColorName(this Color c)
+		{
+			var predefined = typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
+			var match = (from p in predefined where ((Color)p.GetValue(null, null)).ToArgb() == c.ToArgb() select (Color)p.GetValue(null, null));
+			if (match.Any())
+				return match.First().Name;
+			return String.Empty;
 		}
 
 	}
