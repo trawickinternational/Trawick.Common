@@ -109,7 +109,7 @@ namespace Trawick.Common.Extensions
 
 
 		// https://www.cyotek.com/blog/an-introduction-to-dithering-images
-
+		// https://stackoverflow.com/questions/28323448/fast-bitmap-modifying-using-bitmapdata-and-pointers-in-c-sharp
 
 	}
 }

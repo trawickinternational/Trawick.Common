@@ -10,8 +10,11 @@ namespace Trawick.Common.Extensions
 	{
 		public static int AgeOn(this DateTime birthday, DateTime reference)
 		{
+			// Calculate the age.
 			int age = reference.Year - birthday.Year;
-			if (reference < birthday.AddYears(age)) age--;
+			// Go back to the year the person was born in case of a leap year
+			if (birthday > reference.AddYears(-age)) age--;
+			//if (reference < birthday.AddYears(age)) age--;
 			return age;
 		}
 
