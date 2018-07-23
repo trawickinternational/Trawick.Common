@@ -51,5 +51,65 @@ namespace Trawick.Common.Extensions
 			return String.Empty;
 		}
 
+
+		// https://www.cyotek.com/blog/finding-nearest-colors-using-euclidean-distance
+
+		public static int GetDistance(this Color current, Color match)
+		{
+			int redDifference;
+			int greenDifference;
+			int blueDifference;
+
+			redDifference = current.R - match.R;
+			greenDifference = current.G - match.G;
+			blueDifference = current.B - match.B;
+
+			return redDifference * redDifference + greenDifference * greenDifference + blueDifference * blueDifference;
+		}
+
+		public static int GetDistanceWithAlpha(this Color current, Color match)
+		{
+			int redDifference;
+			int greenDifference;
+			int blueDifference;
+			int alphaDifference;
+
+			alphaDifference = current.A - match.A;
+			redDifference = current.R - match.R;
+			greenDifference = current.G - match.G;
+			blueDifference = current.B - match.B;
+
+			return alphaDifference * alphaDifference + redDifference * redDifference + greenDifference * greenDifference + blueDifference * blueDifference;
+		}
+
+		public static int FindNearestColor(this Color current, Color[] map)
+		{
+			int shortestDistance;
+			int index;
+
+			index = -1;
+			shortestDistance = int.MaxValue;
+
+			for (int i = 0; i < map.Length; i++)
+			{
+				Color match;
+				int distance;
+
+				match = map[i];
+				distance = GetDistance(current, match);
+
+				if (distance < shortestDistance)
+				{
+					index = i;
+					shortestDistance = distance;
+				}
+			}
+			return index;
+		}
+
+
+		// https://www.cyotek.com/blog/an-introduction-to-dithering-images
+
+
 	}
 }
