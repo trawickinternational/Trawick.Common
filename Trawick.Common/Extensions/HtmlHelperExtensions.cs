@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Html;
 using System.Web.Routing;
-//using System.Web.WebPages.Html;
 
 namespace Trawick.Common.Extensions
 {
 	public static class HtmlHelperExtensions
 	{
+
 		// ActionLink for Bootstrap. Adds "active" class if current page and converts all text to HtmlString, so it can include markup.
 		public static MvcHtmlString BsActionLink(this HtmlHelper html, string text, string action, string controller, object routeValues = null, object htmlAttr = null)
 		{
@@ -72,6 +75,57 @@ namespace Trawick.Common.Extensions
 			return defaultHtmlAttributes;
 		}
 		// https://cpratt.co/html-editorfor-and-htmlattributes/
+
+
+
+		// Just Expanding to Include Nullable Booleans
+		public static MvcHtmlString CheckBoxFor<T>(this HtmlHelper<T> htmlHelper, Expression<Func<T, bool?>> expression, IDictionary<string, object> htmlAttributes)
+		{
+			ModelMetadata modelMeta = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+			bool? value = (modelMeta.Model as bool?);
+			string name = ExpressionHelper.GetExpressionText(expression);
+			return htmlHelper.CheckBox(name, value ?? false, htmlAttributes);
+		}
+
+
+		public static MvcHtmlString RadioButtonForSelectList<TModel, TProperty>(
+		this HtmlHelper<TModel> htmlHelper,
+		Expression<Func<TModel, TProperty>> expression,
+		IEnumerable<SelectListItem> listOfValues,
+		string rbClassName = "Horizontal")
+		{
+			var metaData = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+			var sb = new StringBuilder();
+
+			if (listOfValues != null)
+			{
+				// Create a radio button for each item in the list 
+				foreach (SelectListItem item in listOfValues)
+				{
+					// Generate an id to be given to the radio button field 
+					var id = string.Format("{0}_{1}", metaData.PropertyName, item.Value);
+
+					// Create and populate a radio button using the existing html helpers 
+					var label = htmlHelper.Label(id, HttpUtility.HtmlEncode(item.Text));
+					var radio = string.Empty;
+
+					if (item.Selected == true)
+					{
+						radio = htmlHelper.RadioButtonFor(expression, item.Value, new { id = id, @checked = "checked" }).ToHtmlString();
+					}
+					else
+					{
+						radio = htmlHelper.RadioButtonFor(expression, item.Value, new { id = id }).ToHtmlString();
+					}
+					// Create the html string to return to client browser
+					// e.g. <input data-val="true" data-val-required="You must select an option" id="RB_1" name="RB" type="radio" value="1" /><label for="RB_1">Choice 1</label> 
+					sb.AppendFormat("<div class=\"RB{2}\">{0}{1}</div>", radio, label, rbClassName);
+				}
+			}
+			return MvcHtmlString.Create(sb.ToString());
+		}
+		// @Html.RadioButtonForSelectList(m => m.Sexsli, (SelectList)Model.Sexsli, "Sex") 
+
 
 	}
 }

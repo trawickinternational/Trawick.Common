@@ -99,8 +99,10 @@
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Extensions\IntegerExtensions.cs" />
     <Compile Include="Extensions\ModelExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\SectionExtensions.cs" />
     <Compile Include="Extensions\SelectListExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Helpers\Common.cs" />
     <Compile Include="Helpers\Copy.cs" />
     <Compile Include="Helpers\CsvHelper.cs" />
