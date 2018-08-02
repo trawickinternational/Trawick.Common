@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +10,17 @@ namespace Trawick.Common.Extensions
 {
 	public static class ObjectExtensions
 	{
+		public static string ToJsonString(this object obj)
+		{
+			var sb = new StringBuilder();
+			using (var sw = new StringWriter(sb))
+			{
+				var js = new JsonSerializer();
+				js.Serialize(sw, obj);
+			}
+			return sb.ToString();
+		}
+
 		public static bool IsDefaultValue(this object param)
 		{
 			return param == param.GetType().DefaultValue();
