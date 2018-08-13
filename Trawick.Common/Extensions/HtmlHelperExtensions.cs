@@ -127,6 +127,37 @@ namespace Trawick.Common.Extensions
 		// @Html.RadioButtonForSelectList(m => m.Sexsli, (SelectList)Model.Sexsli, "Sex") 
 
 
+
+
+		//public static MvcHtmlString KeywordDropDownListFor<TModel, TProperty>(
+		//	this HtmlHelper<TModel> htmlHelper, 
+		//	Expression<Func<TModel, TProperty>> expression, 
+		//	IEnumerable<SelectListItem> selectList, 
+		//	object htmlAttributes)
+		//{
+		//	Func<TModel, TProperty> method = expression.Compile();
+		//	string value = method(htmlHelper.ViewData.Model) as string;
+
+		//	if (string.IsNullOrEmpty(value))
+		//	{
+		//		List<SelectListItem> newItems = new List<SelectListItem>();
+		//		newItems.Add(new SelectListItem
+		//		{
+		//			Selected = true,
+		//			Text = Strings.ChooseAKeyword,
+		//			Value = string.Empty
+		//		});
+		//		foreach (SelectListItem item in selectList)
+		//		{
+		//			newItems.Add(item);
+		//		}
+
+		//		return htmlHelper.DropDownListFor(expression, newItems, htmlAttributes);
+		//	}
+
+		//	return htmlHelper.DropDownListFor(expression, selectList, htmlAttributes);
+		//}
+
 	}
 }
 
