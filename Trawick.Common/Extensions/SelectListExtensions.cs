@@ -9,6 +9,18 @@ namespace Trawick.Common.Extensions
 	public static class SelectListExtensions
 	{
 
+		public static IEnumerable<SelectListItem> ToSelectList<T>(this IEnumerable<T> source, Func<T, string> valueFunc, Func<T, string> textFunc)
+		{
+			return source.Select(x => new SelectListItem
+			{
+				Value = valueFunc(x),
+				Text = textFunc(x)
+			});
+		}
+		//@Html.DropDownListFor(m => m.Item, Model.MyList.ToSelectList(x => x.ValueProperty, x => x.TextProperty))
+		//@Html.DropDownListFor(m => m.Item, Model.MyList.ToSelectList(x => x.ValueProperty, x => x.TextProperty), "Choose...", new { @class = "form-control dropdown" })
+
+
 		public static SelectList SetValue(this SelectList selectList, object selectedValue)
 		{
 			if (selectedValue != null)
