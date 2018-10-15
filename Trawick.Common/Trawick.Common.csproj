@@ -91,7 +91,9 @@
     <Compile Include="Data\AdminContext.cs" />
     <Compile Include="Email\EmailFactory.cs" />
     <Compile Include="Email\EmailFactorySection.cs" />
+    <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
+    <Compile Include="Extensions\DataReaderExtension.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Extensions\HttpPostedFileBaseExtensions.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="Extensions\SelectListExtensions.cs" />
     <Compile Include="Extensions\SessionExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Extensions\WebExtensions.cs" />
     <Compile Include="Helpers\Common.cs" />
     <Compile Include="Helpers\Copy.cs" />
     <Compile Include="Helpers\CsvHelper.cs" />
