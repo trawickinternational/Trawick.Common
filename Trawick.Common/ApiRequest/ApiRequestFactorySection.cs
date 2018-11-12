@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
-namespace Trawick.Common.Email
+namespace Trawick.Common.ApiRequest
 {
-    public class EmailFactorySettings : ConfigurationSection
+    public class ApiRequestFactorySection : ConfigurationSection
     {
-        private EmailFactorySettings() { }
+        private ApiRequestFactorySection() { }
 
         [ConfigurationProperty("Name", DefaultValue = "")]
         public string Name
@@ -24,5 +24,7 @@ namespace Trawick.Common.Email
             set { this["SystemType"] = value; }
         }
 
+
+     
     }
 }
