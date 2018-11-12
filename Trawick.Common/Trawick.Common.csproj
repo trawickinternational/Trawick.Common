@@ -57,6 +57,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <HintPath>..\..\Trawick.Portal\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -93,7 +94,9 @@
     <Compile Include="Data\AdminContext.cs" />
     <Compile Include="Email\EmailFactory.cs" />
     <Compile Include="ApiRequest\ApiRequestFactorySection.cs" />
+    <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
+    <Compile Include="Extensions\DataReaderExtension.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Extensions\HttpPostedFileBaseExtensions.cs" />
@@ -105,6 +108,7 @@
     <Compile Include="Extensions\SelectListExtensions.cs" />
     <Compile Include="Extensions\SessionExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Extensions\WebExtensions.cs" />
     <Compile Include="Helpers\Common.cs" />
     <Compile Include="Helpers\Copy.cs" />
     <Compile Include="Helpers\CsvHelper.cs" />
