@@ -90,6 +90,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiRequest\RestServiceRequestSection.cs" />
     <Compile Include="Email\EmailFactorySection.cs" />
     <Compile Include="Data\AdminContext.cs" />
     <Compile Include="Email\EmailFactory.cs" />
