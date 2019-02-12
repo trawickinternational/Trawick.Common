@@ -77,9 +77,43 @@ namespace Trawick.Common.Extensions
 		// https://cpratt.co/html-editorfor-and-htmlattributes/
 
 
+		public static MvcHtmlString BootstrapCheckBoxFor<TModel>(this HtmlHelper<TModel> helper, Expression<Func<TModel, bool>> expression)
+		{
+			TagBuilder innerContainer = new TagBuilder("div");
+			innerContainer.AddCssClass("col-sm-5");
+			innerContainer.InnerHtml = helper.CheckBoxFor(expression, new { @class = "form-control" }).ToString();
+
+			StringBuilder html = new StringBuilder();
+			html.Append(helper.LabelFor(expression, new { @class = "col-sm-3 control-label" }));
+			html.Append(innerContainer.ToString());
+
+			TagBuilder outerContainer = new TagBuilder("div");
+			outerContainer.AddCssClass("form-group");
+			outerContainer.InnerHtml = html.ToString();
+
+			return MvcHtmlString.Create(outerContainer.ToString());
+		}
+		// https://stackoverflow.com/questions/27303529/creating-a-helper-to-override-checkboxfor
+
 
 		// Just Expanding to Include Nullable Booleans
-		public static MvcHtmlString CheckBoxFor<T>(this HtmlHelper<T> htmlHelper, Expression<Func<T, bool?>> expression, IDictionary<string, object> htmlAttributes)
+		public static MvcHtmlString CheckBoxFor<TModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, bool?>> expression)
+		{
+			ModelMetadata modelMeta = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+			bool? value = (modelMeta.Model as bool?);
+			string name = ExpressionHelper.GetExpressionText(expression);
+			return htmlHelper.CheckBox(name, value ?? false);
+		}
+
+		public static MvcHtmlString CheckBoxFor<TModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, bool?>> expression, object htmlAttributes)
+		{
+			ModelMetadata modelMeta = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+			bool? value = (modelMeta.Model as bool?);
+			string name = ExpressionHelper.GetExpressionText(expression);
+			return htmlHelper.CheckBox(name, value ?? false, htmlAttributes);
+		}
+
+		public static MvcHtmlString CheckBoxFor<TModel>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, bool?>> expression, IDictionary<string, object> htmlAttributes)
 		{
 			ModelMetadata modelMeta = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
 			bool? value = (modelMeta.Model as bool?);
