@@ -13,6 +13,26 @@ namespace Trawick.Common.Extensions
 	public static class HtmlHelperExtensions
 	{
 
+		public static MvcHtmlString PartialFor<TModel, TProperty>(this HtmlHelper<TModel> helper, Expression<Func<TModel, TProperty>> expression, string partialViewName)
+		{
+			string name = ExpressionHelper.GetExpressionText(expression);
+			object model = ModelMetadata.FromLambdaExpression(expression, helper.ViewData).Model;
+			var viewData = new ViewDataDictionary(helper.ViewData)
+			{
+				TemplateInfo = new TemplateInfo
+				{
+					HtmlFieldPrefix = name
+				}
+			};
+			//if (model == null)
+			//{
+			//	return null;
+			//}
+			return helper.Partial(partialViewName, model, viewData);
+		}
+		// @Html.PartialFor(model => model.Child, "_AnotherViewModelControl")
+
+
 		// ActionLink for Bootstrap. Adds "active" class if current page and converts all text to HtmlString, so it can include markup.
 		public static MvcHtmlString BsActionLink(this HtmlHelper html, string text, string action, string controller, object routeValues = null, object htmlAttr = null)
 		{
