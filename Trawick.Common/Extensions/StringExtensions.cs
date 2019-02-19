@@ -28,7 +28,7 @@ namespace Trawick.Common.Extensions
 			{
 				return false;
 			}
-			return value.Trim().Replace(" ", "").All(Char.IsLetter);
+			return value.Trim().Replace(" ", "").All(char.IsLetter);
 		}
 
 
@@ -44,7 +44,7 @@ namespace Trawick.Common.Extensions
 			{
 				return false;
 			}
-			return value.Trim().Replace(" ", "").All(Char.IsLetterOrDigit);
+			return value.Trim().Replace(" ", "").All(char.IsLetterOrDigit);
 		}
 
 
@@ -95,23 +95,23 @@ namespace Trawick.Common.Extensions
 		{
 			double output;
 			return Double.TryParse(value, NumberStyles.Any, NumberFormatInfo.InvariantInfo, out output);
-		}
+        }
 
 
-		#endregion
+        #endregion
 
 
-		#region Encrypt/Decrypt
+        #region Encrypt/Decrypt
 
 
-		/// <summary>
-		///		Encrypt a string using the supplied key. Encoding is done using RSA encryption.
-		/// </summary>
-		/// <param name="value">String that must be encrypted.</param>
-		/// <param name="key">Encryption key</param>
-		/// <returns>A string representing a byte array separated by a minus sign.</returns>
-		/// <exception cref="ArgumentException">Occurs when stringToEncrypt or key is null or empty.</exception>
-		public static string Encrypt(this string value, string key)
+        /// <summary>
+        ///		Encrypt a string using the supplied key. Encoding is done using RSA encryption.
+        /// </summary>
+        /// <param name="value">String that must be encrypted.</param>
+        /// <param name="key">Encryption key</param>
+        /// <returns>A string representing a byte array separated by a minus sign.</returns>
+        /// <exception cref="ArgumentException">Occurs when stringToEncrypt or key is null or empty.</exception>
+        public static string Encrypt(this string value, string key)
 		{
 			var cspParameter = new CspParameters { KeyContainerName = key };
 			var rsaServiceProvider = new RSACryptoServiceProvider(cspParameter) { PersistKeyInCsp = true };
@@ -201,11 +201,68 @@ namespace Trawick.Common.Extensions
 			return query.Split('&').Select(p => p.Split('=')).ToDictionary(key => key[0].ToLower().Trim(), val => val[1]);
 		}
 
-		#endregion
+        #endregion
 
 
 
-		public static string ToTitleCase(this string value)
+
+
+        public static bool ContainsAny(this string value, IEnumerable<string> searchWords)
+        {
+            return searchWords.Any(value.Contains);
+        }
+
+        public static bool ContainsAny(this string value, string[] searchWords)
+        {
+            return searchWords.Any(value.Contains);
+        }
+
+
+        public static bool ContainsAll(this string value, IEnumerable<string> searchWords)
+        {
+            return searchWords.All(value.Contains);
+        }
+
+        public static bool ContainsAll(this string value, string[] searchWords)
+        {
+            return searchWords.All(value.Contains);
+        }
+
+
+
+
+        public static bool IsUpper(this string value)
+        {
+            //Consider string to be uppercase if it has no lowercase letters.
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (char.IsLower(value[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
+            //return value.All(char.IsLower);
+        }
+
+
+        public static bool IsLower(this string value)
+        {
+            // Consider string to be lowercase if it has no uppercase letters.
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (char.IsUpper(value[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
+            //return value.All(char.IsUpper);
+        }
+
+
+
+        public static string ToTitleCase(this string value)
 		{
 			return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value);
 		}

@@ -31,5 +31,21 @@ namespace Trawick.Common.Extensions
 			return string.Format("?{0}", string.Join("&", array));
 		}
 
-	}
+
+
+
+
+        public static bool ContainsAny<T>(this IEnumerable<T> Collection, IEnumerable<T> Values)
+        {
+            return Collection.Any(m => Values.Contains(m));
+        }
+
+        public static bool ContainsAll<T>(this IEnumerable<T> Collection, IEnumerable<T> Values)
+        {
+            return Collection.All(m => Values.Contains(m));
+        }
+
+
+
+    }
 }
