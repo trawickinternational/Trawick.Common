@@ -206,6 +206,14 @@ namespace Trawick.Common.Extensions
 
 
 
+        public static string ToUrlDomain(this string value)
+        {
+            var uri = new UriBuilder(value);
+            uri.Scheme = "http";
+            return uri.Uri.GetLeftPart(UriPartial.Authority);
+        }
+
+
 
         public static bool ContainsAny(this string value, IEnumerable<string> searchWords)
         {
