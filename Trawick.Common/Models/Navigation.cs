@@ -64,31 +64,31 @@ namespace Trawick.Common.Models
 			{
 				//string text = xn["title"].InnerText;
 				var title = xn.Attributes["title"];
-                if (title != null)
-                {
-                    string text = title.InnerText;
-                    string href = xn["loc"].InnerText;
+				if (title != null)
+				{
+					string text = title.InnerText;
+					string href = xn["loc"].InnerText;
 
-                    // returns { "/", "about-us/", "our-mission" }
-                    string[] parts = new Uri(href).Segments;
+					// returns { "/", "about-us/", "our-mission" }
+					string[] parts = new Uri(href).Segments;
 
-                    int level = parts.Length - 2;
-                    string parent = parts[level].TrimEnd('/');
-                    string page = parts[level + 1].TrimEnd('/');
+					int level = parts.Length - 2;
+					string parent = parts[level].TrimEnd('/');
+					string page = parts[level + 1].TrimEnd('/');
 
-                    var link = new NavLink
-                    {
-                        Url = href,
-                        Name = text,
-                        Page = page,
-                        Parent = parent
-                    };
+					var link = new NavLink
+					{
+						Url = href,
+						Name = text,
+						Page = page,
+						Parent = parent
+					};
 
-                    if (parent != "products")
-                    {
-                        this.Add(link);
-                    }
-                }
+					if (parent != "products")
+					{
+						this.Add(link);
+					}
+				}
 			}
 		}
 
