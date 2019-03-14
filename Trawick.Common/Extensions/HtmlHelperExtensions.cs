@@ -216,7 +216,7 @@ namespace Trawick.Common.Extensions
 }
 
 
-
+// https://johnnycode.com/2014/10/03/how-to-get-the-current-controller-name-action-or-id-asp-net-mvc/
 
 
 //https://stackoverflow.com/questions/703281/getting-path-relative-to-the-current-working-directory
