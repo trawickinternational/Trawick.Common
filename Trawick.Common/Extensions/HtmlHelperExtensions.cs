@@ -65,6 +65,35 @@ namespace Trawick.Common.Extensions
 		}
 
 
+
+		// Good for use inside page views.
+		/// <summary>
+		/// Gets an object containing a htmlAttributes collection for any Razor HTML helper component,
+		/// supporting a static set (anonymous object) and/or a dynamic set (Dictionary)
+		/// </summary>
+		/// <param name="fixedHtmlAttributes">A fixed set of htmlAttributes (anonymous object)</param>
+		/// <param name="dynamicHtmlAttributes">A dynamic set of htmlAttributes (Dictionary)</param>
+		/// <returns>A collection of htmlAttributes including a merge of the given set(s)</returns>
+		public static IDictionary<string, object> ExtendHtmlAttributes(this HtmlHelper helper, object fixedHtmlAttrs = null, IDictionary<string, object> dynamicHtmlAttrs = null)
+		{
+			var rvd = (fixedHtmlAttrs == null)
+					? new RouteValueDictionary()
+					: HtmlHelper.AnonymousObjectToHtmlAttributes(fixedHtmlAttrs);
+			if (dynamicHtmlAttrs != null)
+			{
+				foreach (KeyValuePair<string, object> kvp in dynamicHtmlAttrs)
+				{
+					rvd[kvp.Key] = kvp.Value;
+				}
+			}
+			return rvd;
+		}
+		//var dic = new Dictionary<string, object>();
+		//if (IsReadOnly()) dic.Add("readonly", "readonly");
+		//Html.TextBoxFor(m => m.Name, ExtendHtmlAttributes(new { @class="someclass" }, dic))
+
+
+
 		// Good for use inside EditorTemplates.
 		public static IDictionary<string, object> MergeHtmlAttributes(this HtmlHelper helper, object htmlAttr, object defaultHtmlAttr)
 		{
