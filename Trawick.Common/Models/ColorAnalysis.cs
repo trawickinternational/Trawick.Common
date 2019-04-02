@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trawick.Common.Extensions;
 
 namespace Trawick.Common.Models
 {
@@ -19,6 +21,8 @@ namespace Trawick.Common.Models
 
 		public Color PrimaryColor { get; private set; }
 		public Color SecondaryColor { get; private set; }
+
+		public bool HasTransparency { get; private set; }
 
 
 		public ColorAnalysis(string path)
@@ -42,6 +46,7 @@ namespace Trawick.Common.Models
 			MostUsedColor = Color.Empty;
 			MostUsedColorIncidence = 0;
 
+			HasTransparency = bmp.HasTransparency();
 
 			Color pixel;
 			int pixelColor;
@@ -166,7 +171,6 @@ namespace Trawick.Common.Models
 			}
 
 		}
-
 
 
 		private List<Color> WebColors =
