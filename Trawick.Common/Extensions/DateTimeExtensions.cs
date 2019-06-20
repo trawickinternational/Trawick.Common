@@ -18,7 +18,12 @@ namespace Trawick.Common.Extensions
 			return age;
 		}
 
-		public static DateTime StartOfWeek(this DateTime dateTime)
+
+        public static int AgeToday(this DateTime birthday)
+        {
+            return AgeOn(birthday, DateTime.Now);
+        }
+        public static DateTime StartOfWeek(this DateTime dateTime)
 		{
 			int dayOfWeek = (int)dateTime.DayOfWeek;
 			dayOfWeek = dayOfWeek == 0 ? 7 : dayOfWeek;
