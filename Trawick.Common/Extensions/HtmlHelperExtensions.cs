@@ -33,6 +33,9 @@ namespace Trawick.Common.Extensions
 		// @Html.PartialFor(model => model.Child, "_AnotherViewModelControl")
 
 
+
+
+
 		// ActionLink for Bootstrap. Adds "active" class if current page and converts all text to HtmlString, so it can include markup.
 		public static MvcHtmlString BsActionLink(this HtmlHelper html, string text, string action, string controller, object routeValues = null, object htmlAttr = null)
 		{
@@ -41,6 +44,12 @@ namespace Trawick.Common.Extensions
 				context = html.ViewContext.ParentActionViewContext;
 
 			var routeDataValues = context.RouteData.Values;
+
+			string currentArea = string.Empty;
+			if (context.RouteData.DataTokens.ContainsKey("area"))
+			{
+				currentArea = context.RouteData.DataTokens["area"].ToString().ToLower();
+			}
 			var currentAction = routeDataValues["action"].ToString().ToLower();
 			var currentController = routeDataValues["controller"].ToString().ToLower();
 
@@ -51,8 +60,13 @@ namespace Trawick.Common.Extensions
 			var htmlAttributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttr);
 			TagBuilder aTag = new TagBuilder("a");
 
-			if (currentAction.Equals(action.ToLower(), StringComparison.InvariantCulture) &&
-				currentController.Equals(controller.ToLower(), StringComparison.InvariantCulture))
+			var area = GetDynamicProperty(routeValues, "area");
+
+			bool isArea = currentArea.Equals(area.ToLower(), StringComparison.InvariantCulture);
+			bool isController = currentController.Equals(controller.ToLower(), StringComparison.InvariantCulture);
+			bool isAction = currentAction.Equals(action.ToLower(), StringComparison.InvariantCulture);
+
+			if (isArea && isController && isAction)
 			{
 				htmlAttributes["class"] += " active";
 			}
@@ -63,6 +77,26 @@ namespace Trawick.Common.Extensions
 
 			return new MvcHtmlString(aTag.ToString(TagRenderMode.Normal));
 		}
+
+
+		public static string GetDynamicProperty(dynamic args, string name)
+		{
+			if (args == null) return string.Empty;
+			var propertyInfo = args.GetType().GetProperty(name);
+			var value = propertyInfo.GetValue(args, null);
+			return value != null ? value.ToString() : string.Empty;
+		}
+
+		public static bool PropertyExists(dynamic args, string name)
+		{
+			if (args == null) return false;
+			if (args is IDictionary<string, object> dict)
+			{
+				return dict.ContainsKey(name);
+			}
+			return args.GetType().GetProperty(name) != null;
+		}
+
 
 
 
