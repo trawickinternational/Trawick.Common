@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Trawick.Common.Extensions;
@@ -27,7 +29,25 @@ namespace Trawick.Common.Models
 
 		public ColorAnalysis(string path)
 		{
-			bmp = Image.FromFile(path) as Bitmap;
+			if (path.StartsWith("http"))
+			{
+				try
+				{
+					WebRequest request = WebRequest.Create(path);
+					WebResponse response = request.GetResponse();
+					Stream stream = response.GetResponseStream();
+					bmp = new Bitmap(stream);
+				}
+				catch (Exception ex)
+				{
+					// "There was a problem downloading the file"
+				}
+			}
+			else
+			{
+				bmp = Image.FromFile(path) as Bitmap;
+			}
+			//bmp = Image.FromFile(path) as Bitmap;
 			AnalyzeColors();
 		}
 
