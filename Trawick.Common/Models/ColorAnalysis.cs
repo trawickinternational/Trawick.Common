@@ -13,7 +13,7 @@ namespace Trawick.Common.Models
 {
 	public class ColorAnalysis
 	{
-		public Bitmap bmp;
+		public Bitmap Bitmap;
 
 		public List<Color> TenMostUsedColors { get; private set; }
 		public List<int> TenMostUsedColorIncidences { get; private set; }
@@ -26,9 +26,21 @@ namespace Trawick.Common.Models
 
 		public bool HasTransparency { get; private set; }
 
+		private bool ExcludeWhite;
 
-		public ColorAnalysis(string path)
+
+		public Color LightestColor { get; private set; }
+		public Color DarkestColor { get; private set; }
+
+
+
+		#region Constructors
+
+
+		public ColorAnalysis(string path, bool excludeWhite = false)
 		{
+			ExcludeWhite = excludeWhite;
+
 			if (path.StartsWith("http"))
 			{
 				try
@@ -36,7 +48,7 @@ namespace Trawick.Common.Models
 					WebRequest request = WebRequest.Create(path);
 					WebResponse response = request.GetResponse();
 					Stream stream = response.GetResponseStream();
-					bmp = new Bitmap(stream);
+					Bitmap = new Bitmap(stream);
 				}
 				catch (Exception ex)
 				{
@@ -45,17 +57,41 @@ namespace Trawick.Common.Models
 			}
 			else
 			{
-				bmp = Image.FromFile(path) as Bitmap;
+				Bitmap = Image.FromFile(path) as Bitmap;
 			}
-			//bmp = Image.FromFile(path) as Bitmap;
+			//Bitmap = Image.FromFile(path) as Bitmap;
 			AnalyzeColors();
 		}
 
-		public ColorAnalysis(Bitmap bitmap)
+
+		public ColorAnalysis(Bitmap bitmap, bool excludeWhite = false)
 		{
-			bmp = bitmap;
+			ExcludeWhite = excludeWhite;
+			Bitmap = bitmap;
 			AnalyzeColors();
 		}
+
+
+		#endregion
+
+
+
+		public Color PrimaryDarkerThan(string hex)
+		{
+			Color _color = ColorTranslator.FromHtml(hex);
+
+			foreach (Color color in TenMostUsedColors)
+			{
+				if (color.GetBrightness() < _color.GetBrightness())
+				{
+					return color;
+				}
+			}
+			return PrimaryColor;
+		}
+
+
+		#region Analyze
 
 
 		private void AnalyzeColors()
@@ -66,7 +102,7 @@ namespace Trawick.Common.Models
 			MostUsedColor = Color.Empty;
 			MostUsedColorIncidence = 0;
 
-			HasTransparency = bmp.HasTransparency();
+			HasTransparency = Bitmap.HasTransparency();
 
 			Color pixel;
 			int pixelColor;
@@ -76,18 +112,34 @@ namespace Trawick.Common.Models
 			var dctWebColorIncidence = new Dictionary<int, int>();
 
 			// this is what you want to speed up with unmanaged code
-			for (int row = 0; row < bmp.Size.Width; row++)
+			for (int row = 0; row < Bitmap.Size.Width; row++)
 			{
-				for (int col = 0; col < bmp.Size.Height; col++)
+				for (int col = 0; col < Bitmap.Size.Height; col++)
 				{
 
 					// https://www.cyotek.com/blog/dithering-an-image-using-the-floyd-steinberg-algorithm-in-csharp
 					// GetPixel, SetPixel: BAD
 
-					pixel = bmp.GetPixel(row, col);
+					pixel = Bitmap.GetPixel(row, col);
 					// Don't allow transparent
 					if (pixel.A == 255)
 					{
+
+						if (ExcludeWhite && pixel.R == 255 && pixel.G == 255 && pixel.B == 255)
+						{
+							// This pixel is white. Exclude it?
+							continue;
+						}
+
+
+						//if (ExcludeGray && !(pixel.R != pixel.G || pixel.G != pixel.B))
+						//{
+						//	// This pixel is gray. Exclude it?
+						//	continue;
+						//}
+
+
+
 						pixelColor = pixel.ToArgb();
 						if (dctColorIncidence.Keys.Contains(pixelColor))
 						{
@@ -123,15 +175,28 @@ namespace Trawick.Common.Models
 
 			foreach (KeyValuePair<int, int> kvp in dctSortedByValueHighToLow.Take(10))
 			{
-				TenMostUsedColors.Add(Color.FromArgb(kvp.Key));
+				Color _color = Color.FromArgb(kvp.Key);
+				TenMostUsedColors.Add(_color);
 				TenMostUsedColorIncidences.Add(kvp.Value);
 
-				//TenMostUsedHexes.Add(Color.FromArgb(kvp.Key).ToHexString());
-				//TenMostUsedWebHexes.Add(GetNearestWebColor(Color.FromArgb(kvp.Key)).ToHexString());
+				//TenMostUsedHexes.Add(_color.ToHexString());
+				//TenMostUsedWebHexes.Add(GetNearestWebColor(_color).ToHexString());
 			}
 
 			MostUsedColor = Color.FromArgb(dctSortedByValueHighToLow.First().Key);
 			MostUsedColorIncidence = dctSortedByValueHighToLow.First().Value;
+
+
+
+			//var TenLightestColors = new List<Color>();
+			//var TenDarkestColors = new List<Color>();
+
+			List<Color> ColorsByBrightness = dctColorIncidence
+				.Select(x => Color.FromArgb(x.Key))
+				.OrderByDescending(x => x.GetBrightness()).ToList();
+
+			LightestColor = ColorsByBrightness.First();
+			DarkestColor = ColorsByBrightness.Last();
 
 
 			// Added to help with gradients
@@ -245,6 +310,126 @@ namespace Trawick.Common.Models
 
 			return NearestColor;
 		}
+
+
+		#endregion
+
+
+
+		private Color ChangeColorBrightness(Color color, float correctionFactor)
+		{
+			float red = (float)color.R;
+			float green = (float)color.G;
+			float blue = (float)color.B;
+
+			if (correctionFactor < 0)
+			{
+				correctionFactor = 1 + correctionFactor;
+				red *= correctionFactor;
+				green *= correctionFactor;
+				blue *= correctionFactor;
+			}
+			else
+			{
+				red = (255 - red) * correctionFactor + red;
+				green = (255 - green) * correctionFactor + green;
+				blue = (255 - blue) * correctionFactor + blue;
+			}
+
+			return Color.FromArgb(color.A, (int)red, (int)green, (int)blue);
+		}
+
+
+		#region Grayscale
+
+
+		//private static unsafe bool IsGrayScale(Image image)
+		//{
+		//	using (var bmp = new Bitmap(image))
+		//	{
+		//		var data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
+
+		//		var pt = (int*)data.Scan0;
+		//		var res = true;
+
+		//		for (var i = 0; i < data.Height * data.Width; i++)
+		//		{
+		//			var color = Color.FromArgb(pt[i]);
+
+		//			if (color.A != 0 && (color.R != color.G || color.G != color.B))
+		//			{
+		//				res = false;
+		//				break;
+		//			}
+		//		}
+
+		//		bmp.UnlockBits(data);
+
+		//		return res;
+		//	}
+		//}
+
+
+		//private bool IsGrayScale(Bitmap bitmap)
+		//{
+		//	bool res = true;
+		//	unsafe
+		//	{
+		//		BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite, bitmap.PixelFormat);
+
+		//		int bytesPerPixel = Bitmap.GetPixelFormatSize(bitmap.PixelFormat) / 8;
+		//		int heightInPixels = data.Height;
+		//		int widthInBytes = data.Width * bytesPerPixel;
+		//		byte* PtrFirstPixel = (byte*)data.Scan0;
+		//		Parallel.For(0, heightInPixels, y =>
+		//		{
+		//			byte* currentLine = PtrFirstPixel + (y * data.Stride);
+		//			for (int x = 0; x < widthInBytes; x = x + bytesPerPixel)
+		//			{
+		//				int b = currentLine[x];
+		//				int g = currentLine[x + 1];
+		//				int r = currentLine[x + 2];
+		//				if (b != g || r != g)
+		//				{
+		//					res = false;
+		//					break;
+		//				}
+		//			}
+		//		});
+		//		bitmap.UnlockBits(data);
+		//	}
+		//	return res;
+		//}
+
+
+
+		private Bitmap MakeGrayscale(Bitmap bitmap)
+		{
+			//Declare bmp as a new Bitmap with the same Width & Height
+			Bitmap bmp = new Bitmap(bitmap.Width, bitmap.Height);
+
+			for (int x = 0; x < bitmap.Width; x++)
+			{
+				for (int y = 0; y < bitmap.Height; y++)
+				{
+					//Get the Pixel
+					Color pixel = bitmap.GetPixel(x, y);
+
+					//Declare grayScale as the Grayscale Pixel
+					int grayScale = (int)((pixel.R * 0.3) + (pixel.G * 0.59) + (pixel.B * 0.11));
+
+					//Declare color as a Grayscale Color
+					Color color = Color.FromArgb(grayScale, grayScale, grayScale);
+
+					//Set the Grayscale Pixel
+					bmp.SetPixel(x, y, color);
+				}
+			}
+			return bmp;
+		}
+
+
+		#endregion
 
 	}
 }
