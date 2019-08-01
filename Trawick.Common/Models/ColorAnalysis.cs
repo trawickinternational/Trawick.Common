@@ -11,6 +11,15 @@ using Trawick.Common.Extensions;
 
 namespace Trawick.Common.Models
 {
+
+	//public class Pixel
+	//{
+	//	public Color Color { get; set; }
+	//	public Color WebColor { get; set; }
+
+	//}
+
+
 	public class ColorAnalysis
 	{
 		public Bitmap Bitmap;

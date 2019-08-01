@@ -82,7 +82,15 @@ namespace Trawick.Common.Extensions
 			return alphaDifference * alphaDifference + redDifference * redDifference + greenDifference * greenDifference + blueDifference * blueDifference;
 		}
 
-		public static int FindNearestColor(this Color current, Color[] map)
+
+
+		public static Color FindNearestColor(this Color current, List<Color> colors)
+		{
+			return FindNearestColor(current, colors.ToArray());
+		}
+
+
+		public static Color FindNearestColor(this Color current, Color[] colors)
 		{
 			int shortestDistance;
 			int index;
@@ -90,12 +98,12 @@ namespace Trawick.Common.Extensions
 			index = -1;
 			shortestDistance = int.MaxValue;
 
-			for (int i = 0; i < map.Length; i++)
+			for (int i = 0; i < colors.Length; i++)
 			{
 				Color match;
 				int distance;
 
-				match = map[i];
+				match = colors[i];
 				distance = GetDistance(current, match);
 
 				if (distance < shortestDistance)
@@ -104,9 +112,10 @@ namespace Trawick.Common.Extensions
 					shortestDistance = distance;
 				}
 			}
-			return index;
-		}
 
+			return colors[index];
+			//return index;
+		}
 
 		// https://www.cyotek.com/blog/an-introduction-to-dithering-images
 		// https://stackoverflow.com/questions/28323448/fast-bitmap-modifying-using-bitmapdata-and-pointers-in-c-sharp
