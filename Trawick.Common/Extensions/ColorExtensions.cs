@@ -15,6 +15,38 @@ namespace Trawick.Common.Extensions
 		public static string ToRgbString(this Color c) => $"RGB({c.R}, {c.G}, {c.B})";
 
 
+
+		// Coefficient (coef) is a value from 0 to 1; more is lighter, less is darker:
+		public static Color ChangeLightness(this Color c, float coef)
+		{
+			return Color.FromArgb(c.A, (int)(c.R * coef), (int)(c.G * coef), (int)(c.B * coef));
+		}
+
+		// Or, if you'd like to use an integer value from 1 to 10 instead of the coefficient:
+		public static Color ChangeLightness(this Color c, int lightness)
+		{
+			int MinLightness = 1;
+			int MaxLightness = 10;
+			float MinLightnessCoef = 1f;
+			float MaxLightnessCoef = 0.4f;
+
+			if (lightness < MinLightness)
+				lightness = MinLightness;
+			else if (lightness > MaxLightness)
+				lightness = MaxLightness;
+
+			float coef = MinLightnessCoef +
+				(
+					(lightness - MinLightness) *
+						((MaxLightnessCoef - MinLightnessCoef) / (MaxLightness - MinLightness))
+				);
+
+			return Color.FromArgb(c.A, (int)(c.R * coef), (int)(c.G * coef), (int)(c.B * coef));
+		}
+
+
+
+
 		//public static Color GetContrastColor(this Color c)
 		//{
 		//	return Color.FromArgb(c.R > 127 ? 0 : 255, c.G > 127 ? 0 : 255, c.B > 127 ? 0 : 255);
