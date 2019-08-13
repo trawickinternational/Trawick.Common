@@ -69,7 +69,8 @@ namespace Trawick.Common.Models
 				Bitmap = Image.FromFile(path) as Bitmap;
 			}
 			//Bitmap = Image.FromFile(path) as Bitmap;
-			AnalyzeColors();
+            if (Bitmap != null)
+			    AnalyzeColors();
 		}
 
 
@@ -77,7 +78,8 @@ namespace Trawick.Common.Models
 		{
 			ExcludeWhite = excludeWhite;
 			Bitmap = bitmap;
-			AnalyzeColors();
+            if (Bitmap != null)
+                AnalyzeColors();
 		}
 
 
