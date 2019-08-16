@@ -90,9 +90,10 @@ namespace Trawick.Common.Extensions
 		public static bool PropertyExists(dynamic args, string name)
 		{
 			if (args == null) return false;
-			if (args is IDictionary<string, object> dict)
+			if (args is IDictionary<string, object>)
 			{
-				return dict.ContainsKey(name);
+				return (args as IDictionary<string, object>).ContainsKey(name);
+				//return dict.ContainsKey(name);
 			}
 			return args.GetType().GetProperty(name) != null;
 		}
