@@ -81,11 +81,17 @@ namespace Trawick.Common.Extensions
 
 		public static string GetDynamicProperty(dynamic args, string name)
 		{
-			if (args == null) return string.Empty;
-			var propertyInfo = args.GetType().GetProperty(name);
-			var value = propertyInfo.GetValue(args, null);
-			return value != null ? value.ToString() : string.Empty;
-		}
+			if (args != null)
+            {
+                var propertyInfo = args.GetType().GetProperty(name);
+                if (propertyInfo != null)
+                {
+                    var value = propertyInfo.GetValue(args, null);
+                    return value != null ? value.ToString() : string.Empty;
+                }
+            }
+            return string.Empty;
+        }
 
 		public static bool PropertyExists(dynamic args, string name)
 		{
