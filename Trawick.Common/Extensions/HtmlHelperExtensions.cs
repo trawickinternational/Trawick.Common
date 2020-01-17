@@ -13,6 +13,14 @@ namespace Trawick.Common.Extensions
 	public static class HtmlHelperExtensions
 	{
 
+		public static bool PartialExists(this HtmlHelper html, string partialViewName)
+		{
+			var controllerContext = html.ViewContext.Controller.ControllerContext;
+			var viewEngineResult = ViewEngines.Engines.FindPartialView(controllerContext, partialViewName);
+			return (viewEngineResult.View != null);
+		}
+
+
 		public static MvcHtmlString PartialFor<TModel, TProperty>(this HtmlHelper<TModel> helper, Expression<Func<TModel, TProperty>> expression, string partialViewName)
 		{
 			string name = ExpressionHelper.GetExpressionText(expression);
