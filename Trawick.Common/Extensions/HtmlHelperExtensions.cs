@@ -13,6 +13,14 @@ namespace Trawick.Common.Extensions
 	public static class HtmlHelperExtensions
 	{
 
+		public static bool PartialExists(this HtmlHelper html, string partialViewName)
+		{
+			var controllerContext = html.ViewContext.Controller.ControllerContext;
+			var viewEngineResult = ViewEngines.Engines.FindPartialView(controllerContext, partialViewName);
+			return (viewEngineResult.View != null);
+		}
+
+
 		public static MvcHtmlString PartialFor<TModel, TProperty>(this HtmlHelper<TModel> helper, Expression<Func<TModel, TProperty>> expression, string partialViewName)
 		{
 			string name = ExpressionHelper.GetExpressionText(expression);
@@ -81,18 +89,25 @@ namespace Trawick.Common.Extensions
 
 		public static string GetDynamicProperty(dynamic args, string name)
 		{
-			if (args == null) return string.Empty;
-			var propertyInfo = args.GetType().GetProperty(name);
-			var value = propertyInfo.GetValue(args, null);
-			return value != null ? value.ToString() : string.Empty;
-		}
+			if (args != null)
+            {
+                var propertyInfo = args.GetType().GetProperty(name);
+                if (propertyInfo != null)
+                {
+                    var value = propertyInfo.GetValue(args, null);
+                    return value != null ? value.ToString() : string.Empty;
+                }
+            }
+            return string.Empty;
+        }
 
 		public static bool PropertyExists(dynamic args, string name)
 		{
 			if (args == null) return false;
-			if (args is IDictionary<string, object> dict)
+			if (args is IDictionary<string, object>)
 			{
-				return dict.ContainsKey(name);
+				return (args as IDictionary<string, object>).ContainsKey(name);
+				//return dict.ContainsKey(name);
 			}
 			return args.GetType().GetProperty(name) != null;
 		}

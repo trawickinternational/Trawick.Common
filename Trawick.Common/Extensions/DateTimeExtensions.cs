@@ -8,6 +8,7 @@ namespace Trawick.Common.Extensions
 {
 	public static class DateTimeExtensions
 	{
+
 		public static int AgeOn(this DateTime birthday, DateTime reference)
 		{
 			// Calculate the age.
@@ -18,12 +19,13 @@ namespace Trawick.Common.Extensions
 			return age;
 		}
 
+		public static int AgeToday(this DateTime birthday)
+		{
+			return AgeOn(birthday, DateTime.Now);
+		}
 
-        public static int AgeToday(this DateTime birthday)
-        {
-            return AgeOn(birthday, DateTime.Now);
-        }
-        public static DateTime StartOfWeek(this DateTime dateTime)
+
+		public static DateTime StartOfWeek(this DateTime dateTime)
 		{
 			int dayOfWeek = (int)dateTime.DayOfWeek;
 			dayOfWeek = dayOfWeek == 0 ? 7 : dayOfWeek;
@@ -67,6 +69,11 @@ namespace Trawick.Common.Extensions
 				return defaultValue;
 			}
 		}
+
+
+
+
+
 
 
 		//public static DateTime ToDateTime(this string dateString, string format = "MM/dd/yyyy", string cultureString = "en-US")

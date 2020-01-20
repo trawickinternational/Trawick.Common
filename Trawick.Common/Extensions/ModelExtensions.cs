@@ -42,5 +42,25 @@ namespace Trawick.Common.Extensions
 		}
 		// if (member.TryUpdateProperty(x => x.address1, "new address")) { }
 
+
+
+
+
+		//public static TSource MergeValues<TSource>(this TSource target, TSource source)
+		//{
+		//	Type t = typeof(TSource);
+
+		//	var properties = t.GetProperties().Where(prop => prop.CanRead && prop.CanWrite);
+
+		//	foreach (var prop in properties)
+		//	{
+		//		var value = prop.GetValue(source, null);
+		//		if (value != null)
+		//			prop.SetValue(target, value, null);
+		//	}
+
+		//	return target;
+		//}
+
 	}
 }
