@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -95,9 +96,19 @@ namespace Trawick.Common.Extensions
 			}
 		}
 
-		#endregion
+        #endregion
 
-	}
+        public static Dictionary<string, string> ToDictionary(this NameValueCollection col)
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            foreach (var k in col.AllKeys)
+            {
+                dict.Add(k, col[k]);
+            }
+            return dict;
+        }
+
+    }
 
 
 	/// <summary>
@@ -113,7 +124,9 @@ namespace Trawick.Common.Extensions
 			ParentPropertyName = parentPropertyName;
 		}
 	}
-	// [MatchParent("Name")]
+    // [MatchParent("Name")]
+
+   
 
 }
 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Web;
 
 namespace Trawick.Common.Helpers
@@ -125,6 +127,68 @@ namespace Trawick.Common.Helpers
 			return null;
 		}
 
+        public static string ObjectToCsvData(IEnumerable<object> obj)
+        {
+            if (obj == null)
+            {
+                throw new ArgumentNullException("obj", "Value can not be null or Nothing!");
+            }
 
-	}
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in obj)
+            {
+                var sb2 = new StringBuilder();
+                Type t = item.GetType();
+                PropertyInfo[] pi = t.GetProperties();
+                
+                for (int index = 0; index < pi.Length; index++)
+                {
+                    if (pi[index].GetValue(item, null) != null)
+                    {
+                        sb2.Append(Csv.Escape(pi[index].GetValue(item, null).ToString()));
+
+                    }
+                    if (index < pi.Length - 1)
+                    {
+                        sb2.Append(",");
+                    }
+                }
+                sb.AppendLine(sb2.ToString());
+            }
+            return sb.ToString();
+        }
+
+        public static class Csv
+        {
+            public static string Escape(string s)
+            {
+                if (s.Contains(QUOTE))
+                    s = s.Replace(QUOTE, ESCAPED_QUOTE);
+
+                if (s.IndexOfAny(CHARACTERS_THAT_MUST_BE_QUOTED) > -1)
+                    s = QUOTE + s + QUOTE;
+
+                return s;
+            }
+
+            public static string Unescape(string s)
+            {
+                if (s.StartsWith(QUOTE) && s.EndsWith(QUOTE))
+                {
+                    s = s.Substring(1, s.Length - 2);
+
+                    if (s.Contains(ESCAPED_QUOTE))
+                        s = s.Replace(ESCAPED_QUOTE, QUOTE);
+                }
+
+                return s;
+            }
+
+
+            private const string QUOTE = "\"";
+            private const string ESCAPED_QUOTE = "\"\"";
+            private static char[] CHARACTERS_THAT_MUST_BE_QUOTED = { ',', '"', '\n' };
+        }
+        
+    }
 }
