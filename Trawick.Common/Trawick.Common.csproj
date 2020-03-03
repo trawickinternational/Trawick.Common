@@ -118,6 +118,7 @@
     <Compile Include="Helpers\SubdomainRoute.cs" />
     <Compile Include="Interfaces\IEmailSender.cs" />
     <Compile Include="Models\ColorAnalysis.cs" />
+    <Compile Include="Models\ColorBlender.cs" />
     <Compile Include="Models\Navigation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
