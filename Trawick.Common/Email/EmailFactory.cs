@@ -12,7 +12,7 @@ namespace Trawick.Common.Email
     {
         public static Trawick.Common.Interfaces.IEmailSender GetEmailFactory()
         {
-            Configuration config = null;
+            System.Configuration.Configuration config = null;
 
             if (System.Web.HttpContext.Current != null)
             {
