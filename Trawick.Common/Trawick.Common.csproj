@@ -57,23 +57,23 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\Trawick.PortalAdmin\packages\Microsoft.AspNet.WebPages.3.2.5\lib\net45\System.Web.Helpers.dll</HintPath>
+      <HintPath>..\..\Trawick.Portal\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\EmailSender\packages\Microsoft.AspNet.Mvc.5.2.5\lib\net45\System.Web.Mvc.dll</HintPath>
+    <Reference Include="System.Web.Mvc, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Trawick.Portal\packages\Microsoft.AspNet.Mvc.5.2.6\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\Trawick.PortalAdmin\packages\Microsoft.AspNet.Razor.3.2.6\lib\net45\System.Web.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\Trawick.PortalAdmin\packages\Microsoft.AspNet.WebPages.3.2.5\lib\net45\System.Web.WebPages.dll</HintPath>
+      <HintPath>..\..\Trawick.Portal\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.WebPages.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\Trawick.PortalAdmin\packages\Microsoft.AspNet.WebPages.3.2.5\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <HintPath>..\..\Trawick.Portal\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\Trawick.PortalAdmin\packages\Microsoft.AspNet.WebPages.3.2.5\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <HintPath>..\..\Trawick.Portal\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -93,6 +93,7 @@
     <Compile Include="Extensions\DataReaderExtension.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
+    <Compile Include="Extensions\HtmlRequestExtensions.cs" />
     <Compile Include="Extensions\HttpBaseExtensions.cs" />
     <Compile Include="Extensions\HttpPostedFileBaseExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Interfaces\IEmailSender.cs" />
     <Compile Include="Interfaces\ITrawickAction.cs" />
     <Compile Include="Models\ColorAnalysis.cs" />
+    <Compile Include="Models\ColorBlender.cs" />
     <Compile Include="Models\Navigation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
