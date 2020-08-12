@@ -127,7 +127,7 @@ namespace Trawick.Common.Helpers
 			return null;
 		}
 
-        public static string ObjectToCsvData(IEnumerable<object> obj)
+        public static string ObjectToCsvData(IEnumerable<object> obj,string separator =",")
         {
             if (obj == null)
             {
@@ -150,7 +150,7 @@ namespace Trawick.Common.Helpers
                     }
                     if (index < pi.Length - 1)
                     {
-                        sb2.Append(",");
+                        sb2.Append(separator);
                     }
                 }
                 sb.AppendLine(sb2.ToString());
